@@ -112,20 +112,6 @@ simulate_game(Input* input, float dt) {
 			}
 		}
 
-		/*	Counts Score by Rectangles.
-			float at_x = -80;
-			for (int i = 0; i < player_1_score; i++) {
-				draw_rect(at_x, 47.f, 1.f, 1.f, 0xaaaaaa);
-				at_x += 2.5f;
-			}
-
-			at_x = 80;
-			for (int i = 0; i < player_2_score; i++) {
-				draw_rect(at_x, 47.f, 1.f, 1.f, 0xaaaaaa);
-				at_x -= 2.5f;
-			}
-		*/
-
 		draw_number(player_1_score, -10, 40, 1.f, 0xbbffbb);
 		draw_number(player_2_score, 10, 40, 1.f, 0xbbffbb);
 
@@ -153,9 +139,11 @@ simulate_game(Input* input, float dt) {
 		}
 		else {
 			draw_text("SINGLE PLAYER", -80, -10, 1, 0xaaaaaa);
-			draw_text("MULTIPLAYER", 80, -10, 1, 0xff0000);
+			draw_text("MULTIPLAYER", 20, -10, 1, 0xff0000);
 		}
 
-		draw_text("PONG_TUTORIAL", -73, 40, 2, 0xffffff);
+		draw_text("PONG TUTORIAL", -73, 40, 2, 0xffffff);
+		draw_text("WATCH THE STEP BY STEP TUTORIAL ON", -73, 22, .75, 0xffffff);
+		draw_text("YOUTUBE.COM/DANZAIDAN", -73, 15, 1.22, 0xffffff);
 	}
 }

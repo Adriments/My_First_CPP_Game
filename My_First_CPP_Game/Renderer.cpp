@@ -1,4 +1,4 @@
-internal void 
+internal void
 clear_screen(u32 color) {
 	unsigned int* pixel = (u32*)render_state.memory;
 	for (int y = 0; y < render_state.height; y++) {
@@ -8,14 +8,13 @@ clear_screen(u32 color) {
 	}
 }
 
-internal void 
+internal void
 draw_rect_in_pixels(int x0, int y0, int x1, int y1, u32 color) {
-	
+
 	x0 = clamp(0, x0, render_state.width);
 	x1 = clamp(0, x1, render_state.width);
-	y0 = clamp(0, y0, render_state.width);
-	y1 = clamp(0, y1, render_state.width);
-
+	y0 = clamp(0, y0, render_state.height);
+	y1 = clamp(0, y1, render_state.height);
 
 	for (int y = y0; y < y1; y++) {
 		u32* pixel = (u32*)render_state.memory + x0 + y * render_state.width;
@@ -45,7 +44,7 @@ draw_arena_borders(float arena_x, float arena_y, u32 color) {
 
 internal void
 draw_rect(float x, float y, float half_size_x, float half_size_y, u32 color) {
-	
+
 	x *= render_state.height * render_scale;
 	y *= render_state.height * render_scale;
 	half_size_x *= render_state.height * render_scale;
@@ -53,7 +52,7 @@ draw_rect(float x, float y, float half_size_x, float half_size_y, u32 color) {
 
 	x += render_state.width / 2.f;
 	y += render_state.height / 2.f;
-	
+
 	// Change to pixels
 	int x0 = x - half_size_x;
 	int x1 = x + half_size_x;
@@ -61,7 +60,6 @@ draw_rect(float x, float y, float half_size_x, float half_size_y, u32 color) {
 	int y1 = y + half_size_y;
 
 	draw_rect_in_pixels(x0, y0, x1, y1, color);
-
 }
 
 const char* letters[][7] = {
@@ -272,6 +270,22 @@ const char* letters[][7] = {
 	"0",
 	"0",
 	"0000",
+
+	"",
+	"",
+	"",
+	"",
+	"",
+	"",
+	"0",
+
+	"   0",
+	"  0",
+	"  0",
+	" 0",
+	" 0",
+	"0",
+	"0",
 };
 
 internal void
@@ -281,11 +295,14 @@ draw_text(const char* text, float x, float y, float size, u32 color) {
 
 	while (*text) {
 		if (*text != 32) {
-			const char** a_letter = letters[*text - 'A'];
+			const char** letter;
+			if (*text == 47) letter = letters[27];
+			else if (*text == 46) letter = letters[26];
+			else letter = letters[*text - 'A'];
 			float original_x = x;
 
 			for (int i = 0; i < 7; i++) {
-				const char* row = a_letter[i];
+				const char* row = letter[i];
 				while (*row) {
 					if (*row == '0') {
 						draw_rect(x, y, half_size, half_size, color);
@@ -296,17 +313,17 @@ draw_text(const char* text, float x, float y, float size, u32 color) {
 				y -= size;
 				x = original_x;
 			}
-			text++;
-			x += size * 6.f;
-			y = original_y;
 		}
+		text++;
+		x += size * 6.f;
+		y = original_y;
 	}
 }
 
 internal void
 draw_number(int number, float x, float y, float size, u32 color) {
 	float half_size = size * .5f;
-	
+
 	bool drew_number = false;
 	while (number || !drew_number) {
 		drew_number = true;
